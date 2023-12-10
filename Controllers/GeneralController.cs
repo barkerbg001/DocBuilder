@@ -6,5 +6,9 @@ namespace DocBuilder.Controllers;
 [Route("api/[controller]")]
 public class GeneralController : ControllerBase
 {
-    
+    [HttpGet("greetings")]
+    public IActionResult Greetings()
+    {
+        return Ok("Hello World!");
+    }
 }
