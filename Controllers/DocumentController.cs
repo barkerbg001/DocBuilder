@@ -1,4 +1,5 @@
 using DocBuilder.Class;
+using DocBuilder.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocBuilder.Controllers;
@@ -41,29 +42,4 @@ public class DocumentController : ControllerBase
         // Logic to create images for each page of the document
         return Ok(null);
     }
-}
-
-public class PdfRequest
-{
-    // Properties specific to PDF generation
-}
-
-public class XlsxRequest
-{
-    // Properties specific to XLSX generation
-}
-
-public class CsvRequest
-{
-    // Properties specific to CSV generation
-}
-
-public class WordRequest
-{
-    // Properties specific to Word generation
-}
-
-public class ImageRequest
-{
-    // Properties specific to image generation
 }
