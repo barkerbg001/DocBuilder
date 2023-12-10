@@ -1,4 +1,4 @@
-﻿namespace DocBuilder.Enum;
+﻿namespace DocBuilder.Enums;
 
 public enum Align
 {

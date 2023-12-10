@@ -1,4 +1,4 @@
-﻿using DocBuilder.Enum;
+﻿using DocBuilder.Enums;
 namespace DocBuilder.Class;
 
 public class MakePaint

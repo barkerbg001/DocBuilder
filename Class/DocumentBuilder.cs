@@ -1,4 +1,3 @@
-using DocBuilder.Enum;
 namespace DocBuilder.Class;
 
 public class DocumentBuilder

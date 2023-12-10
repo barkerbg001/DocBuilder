@@ -1,10 +1,8 @@
 ﻿using DocBuilder.Class;
-using DocBuilder.Enum;
-using static System.Net.Mime.MediaTypeNames;
-using System.Drawing;
+using DocBuilder.Enums;
 using SkiaSharp;
 
-namespace DocBuilder.Service
+namespace DocBuilder.Services
 {
     public class DrawReport
     {
