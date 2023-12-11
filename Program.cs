@@ -1,10 +1,18 @@
 using System.Reflection;
 using DocBuilder.Class;
+using DocBuilder.DocumentRendering;
+using DocBuilder.Interfaces;
+using DocBuilder.Services;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
+
+
+// Register the DocumentService with the DI container
+builder.Services.AddScoped<IDocumentRenderer, DrawReport>();
+builder.Services.AddScoped<IPdfService, PdfService>();
 
 // Add Swagger services
 builder.Services.AddSwaggerGen(c =>

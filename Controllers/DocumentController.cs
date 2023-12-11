@@ -1,4 +1,5 @@
 using DocBuilder.Class;
+using DocBuilder.Interfaces;
 using DocBuilder.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,11 +9,26 @@ namespace DocBuilder.Controllers;
 [Route("api/[controller]")]
 public class DocumentController : ControllerBase
 {
-    [HttpPost("pdf")]
-    public IActionResult CreatePdf([FromBody] ReportDto request)
+    private readonly IPdfService _pdfService;
+
+    public DocumentController(IPdfService pdfService)
     {
-        // Logic to create a PDF document
-        return Ok(null);
+        _pdfService = pdfService;
+    }
+
+    [HttpPost("pdf")]
+    public IActionResult CreatePdf([FromBody] ReportDto reportDto)
+    {
+        try
+        {
+            var pdfContent = _pdfService.CreateDocumentPdf(reportDto);
+            return File(pdfContent, "application/pdf", "generated-document.pdf");
+        }
+        catch (Exception ex)
+        {
+            // Handle exceptions (e.g., invalid input, generation failure)
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPost("xlsx")]

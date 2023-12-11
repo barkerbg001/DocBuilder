@@ -1,10 +1,11 @@
 ﻿using DocBuilder.Class;
 using DocBuilder.Enums;
+using DocBuilder.Interfaces;
 using SkiaSharp;
 
-namespace DocBuilder.Services
+namespace DocBuilder.DocumentRendering
 {
-    public class DrawReport
+    public class DrawReport : IDocumentRenderer
     {
         private SKColor skBlack = new SKColor(0, 0, 0);
         private SKColor skWhite = new SKColor(255, 255, 255);
@@ -20,7 +21,7 @@ namespace DocBuilder.Services
         private int totalPages = 0;
 
         private SKPaint pntGridLines, pntDataGridBodyLeft, pntDataGridBodyRight;
-        private SKFont SKFont, SKBold;
+
         public DrawReport()
         {
             SetFonts();
@@ -28,14 +29,45 @@ namespace DocBuilder.Services
 
         public void SetFonts()
         {
-            SKFont = new SKFont(SKTypeface.FromFamilyName("Helvetica", SKFontStyleWeight.Medium, SKFontStyleWidth.Condensed, SKFontStyleSlant.Upright));
-            SKBold = new SKFont(SKTypeface.FromFamilyName("Helvetica", SKFontStyleWeight.Bold, SKFontStyleWidth.Condensed, SKFontStyleSlant.Upright));
             pntGridLines = MakeSKPaint(skBlack, true, 20.0f, SKTextAlign.Center);
             pntDataGridBodyLeft = MakeSKPaint(skBlack, true, 11, SKTextAlign.Left);
             pntDataGridBodyRight = MakeSKPaint(skBlack, true, 11, SKTextAlign.Right);
         }
 
-        public DocumentBuilder CreateReport(ReportDto details)
+        public byte[] CreateDocumentPdf(ReportDto details)
+        {
+            var specs = details.specs;
+            var header = details.header;
+            var footer = details.footer;
+            var data = details.data;
+            pdfHeight = specs.Orientation == Orientation.Portrait ? 1188 : 900;
+            Padydown = pdfHeight;
+            pdfWidth = specs.Orientation == Orientation.Portrait ? 900 : 1188;
+            Padxright = pdfWidth;
+            var pdfBulderClass = new DocumentBuilder();
+            var dataPDF = data.Select(x => new ReportDrawDetails
+            {
+                borderBottom = x.borderBottom,
+                borderLeft = x.borderLeft,
+                borderRight = x.borderRight,
+                borderTop = x.borderTop,
+                Centre = x.Centre,
+                ColNo = x.ColNo,
+                colSpan = x.colSpan,
+                customPaint = x.customPaint,
+                image = x.image,
+                isImage = x.isImage,
+                isNumber = x.isNumber,
+                RowId = x.RowId,
+                useCustomFont = x.useCustomFont,
+                Value = x.Value,
+                backgroundColorPaint = x.backgroundColorPaint,
+                hasBackgroundColor = x.hasBackgroundColor,
+            }).ToList();
+            return CreatePdf(specs, header.ToList(), footer.ToList(), dataPDF.Select(x => x).ToList());
+        }
+
+        public List<byte[]> CreateDocumentImages(ReportDto details)
         {
             var specs = details.specs;
             var header = details.header;
@@ -65,28 +97,7 @@ namespace DocBuilder.Services
                 backgroundColorPaint = x.backgroundColorPaint,
                 hasBackgroundColor = x.hasBackgroundColor,
             }).ToList();
-            var dataPDF = data.Select(x => new ReportDrawDetails
-            {
-                borderBottom = x.borderBottom,
-                borderLeft = x.borderLeft,
-                borderRight = x.borderRight,
-                borderTop = x.borderTop,
-                Centre = x.Centre,
-                ColNo = x.ColNo,
-                colSpan = x.colSpan,
-                customPaint = x.customPaint,
-                image = x.image,
-                isImage = x.isImage,
-                isNumber = x.isNumber,
-                RowId = x.RowId,
-                useCustomFont = x.useCustomFont,
-                Value = x.Value,
-                backgroundColorPaint = x.backgroundColorPaint,
-                hasBackgroundColor = x.hasBackgroundColor,
-            }).ToList();
-            pdfBulderClass.Doc = CreatePdf(specs, header.ToList(), footer.ToList(), dataPDF.Select(x => x).ToList());
-            pdfBulderClass.Attachments = CreateImages(specs, header.ToList(), footer.ToList(), dataImages.Select(x => x).ToList());
-            return pdfBulderClass;
+            return CreateImages(specs, header.ToList(), footer.ToList(), dataImages.Select(x => x).ToList());
         }
 
         private List<byte[]> CreateImages(ReportDrawSpecs specs, List<ReportDrawDetails> header, List<ReportDrawDetails> footer, List<ReportDrawDetails> data)
