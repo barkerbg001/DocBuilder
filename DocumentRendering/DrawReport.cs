@@ -148,7 +148,7 @@ namespace DocBuilder.DocumentRendering
             using (var document = SKDocument.CreatePdf(pdfStream, new SKDocumentPdfMetadata
             {
                 Creation = DateTime.Now,
-                Creator = "FinanceApps",
+                Creator = "DocBuilder",
                 PdfA = true
             }))
             {
