@@ -147,9 +147,14 @@ namespace DocBuilder.DocumentRendering
             int pageIndex = 0;
             using (var document = SKDocument.CreatePdf(pdfStream, new SKDocumentPdfMetadata
             {
-                Creation = DateTime.Now,
-                Creator = "DocBuilder",
-                PdfA = true
+                Creation = specs.Creation,
+                Creator = specs.Creator,
+                PdfA = specs.PdfA,
+                Author = specs.Author,
+                Title = specs.Title,
+                Subject = specs.Subject,
+                Keywords = specs.Keywords,
+                Producer = specs.Producer
             }))
             {
                 while (isfinished != true)

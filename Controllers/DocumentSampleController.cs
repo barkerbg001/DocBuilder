@@ -70,7 +70,15 @@ public class DocumentSampleController : ControllerBase
                         RowId = 1,
                         Value = "Page ? of ?"
                     },
-                    Orientation = Orientation.Landscape
+                    Orientation = Orientation.Landscape,
+                    PdfA = true,
+                    Author = "DocBuilder",
+                    Creation = DateTime.Now,
+                    Creator = "DocBuilder",
+                    Keywords = "DocBuilder",
+                    Producer = "DocBuilder",
+                    Subject = "DocBuilder",
+                    Title = "DocBuilder"
                 },
                 data = dwdata,
                 header = head,
